@@ -66,23 +66,23 @@ function* fork (context, heroku) {
   let addons = new Addons(heroku, postgres);
 
   let oldApp = yield apps.getApp(fromAppName);
-  let slug   = yield apps.getLastSlug(oldApp);
+  // let slug   = yield apps.getLastSlug(oldApp);
 
   if (stopping) { return; }
   let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.region);
   deleteAppOnFailure = newApp.name;
 
-  if (stopping) { return; }
-  yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
+  // if (stopping) { return; }
+  // yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
 
-  if (stopping) { return; }
-  yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg'], context.flags.confirm);
+  // if (stopping) { return; }
+  // yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg'], context.flags.confirm);
 
   if (stopping) { return; }
   yield addons.copyConfigVars(oldApp, newApp, context.flags['skip-pg']);
 
-  if (stopping) { return; }
-  yield apps.copySlug(oldApp, newApp, slug);
+  // if (stopping) { return; }
+  // yield apps.copySlug(oldApp, newApp, slug);
 
   yield wait(2000); // TODO remove this after api #4022
 
@@ -90,6 +90,7 @@ function* fork (context, heroku) {
 }
 
 function* run (context, heroku) {
+  cli.warn('THIS IS A MODIFIED VERSION OF FORK; IT ONLY COPIES CONFIG VARS');
   cli.warn('heroku fork is deprecated and will be sunset 2017-12-01');
   cli.warn('see https://github.com/heroku/heroku-fork for more information');
   fromAppName = getFromApp(context);
